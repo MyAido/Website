@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "aido-it"
+  },
+  "targets": {
+    "aido-it": {
+      "hosting": {
+        "myaido": [
+          "myaido"
+        ],
+        "aido-it": [
+          "aido-it"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -1,0 +1,35 @@
+✅ Commands you should use from now on (memorize)
+Deploy both sites
+firebase deploy --only hosting
+
+Deploy only production
+firebase deploy --only hosting:aido-it
+
+Deploy only staging
+firebase deploy --only hosting:myaido
+
+Create a preview URL (temporary, hashed)
+firebase hosting:channel:deploy preview
+
+
+npx http-server
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+
+firebase deploy --only hosting
+
+
+./gradlew installDebug
+
+
+./gradlew assembleDebug
+
+
+C:\Users\admin>adb pair 192.168.0.102:43917
+Enter pairing code: 749634
+Successfully paired to 192.168.0.102:43917 [guid=adb-10MF5XFMMC0001Z-RQh9yO]
+
+C:\Users\admin>ADB connect 192.168.0.102:37003
+connected to 192.168.0.102:37003
+
+C:\Users\admin>

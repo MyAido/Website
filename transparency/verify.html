@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Aido Security - Self-Audit Guide</title>
+    <meta name="description"
+        content="Learn how to independently verify Aido's security and privacy. Step-by-step guide from basic verification to advanced APK analysis and network monitoring.">
+    <meta name="keywords"
+        content="Aido Security, APK Security Verification, Network Analysis, App Security Check, Android Security Audit">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://myaido.web.app/transparency/verify.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myaido.web.app/transparency/verify.html">
+    <meta property="og:title" content="Verify Aido Security - Self-Audit Guide">
+    <meta property="og:description"
+        content="A-to-Z guide on how to independently verify that Aido is safe, secure, and truthful about its privacy claims.">
+    <meta property="og:image" content="https://myaido.web.app/res/viddo.gif">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://myaido.web.app/transparency/verify.html">
+    <meta property="twitter:title" content="Verify Aido Security - Self-Audit Guide">
+    <meta property="twitter:description"
+        content="A-to-Z guide on how to independently verify that Aido is safe, secure, and truthful about its privacy claims.">
+    <meta property="twitter:image" content="https://myaido.web.app/res/viddo.gif">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/transparency/css/audit.css">
+    <style>
+        .verification-level {
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .verification-level h3 {
+            color: var(--primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .step-box h4 {
+            margin-top: 0;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin: 0.75rem 0;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            color: #856404;
+            margin: 1rem 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            border-radius: 4px;
+            color: #155724;
+            margin: 1rem 0;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .difficulty-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .collapsible-section {
+            cursor: pointer;
+            user-select: none;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 0.75rem 0;
+            transition: all 0.2s;
+        }
+
+        .collapsible-section:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible-content.active {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="audit-nav">
+        <a href="../index.html" class="nav-brand">
+            <i class="ri-shield-check-fill" style="color: var(--primary);"></i>
+            Aido <span>Transparency Center</span>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">Main Site</a>
+            <a href="/transparency/index.html">Constitution</a>
+            <a href="/transparency/verify.html" class="active">Verification Guide</a>
+            <a href="/transparency/contact.html">Contact DPO</a>
+        </div>
+        <button id="mobile-menu-btn" class="mobile-menu-toggle"><i class="ri-menu-3-line"></i></button>
+    </nav>
+
+    <div class="audit-header">
+        <div class="container">
+            <div class="status-badge verified" style="margin-bottom: 1rem;"><i class="ri-search-eye-line"></i>
+                Self-Verification Guide</div>
+            <h1>How to Verify Aido Security</h1>
+            <p>Don't just trust our claims—verify them yourself. This comprehensive guide teaches you how to
+                independently audit Aido's security, privacy, and behavior using professional security tools and
+                techniques.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="audit-content">
+            <aside class="audit-sidebar">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-header">Quick Navigation</li>
+                    <li><a href="#level1"><i class="ri-user-line" style="margin-right:8px"></i> Basic Checks</a></li>
+                    <li><a href="#pre-install"><i class="ri-download-cloud-line" style="margin-right:8px"></i>
+                            Pre-Installation</a></li>
+                    <li><a href="#behavioral"><i class="ri-eye-line" style="margin-right:8px"></i> Behavioral</a></li>
+                    <li><a href="#community"><i class="ri-team-line" style="margin-right:8px"></i> Community</a></li>
+                    <li><a href="#level2"><i class="ri-terminal-line" style="margin-right:8px"></i> Intermediate</a>
+                    </li>
+                    <li><a href="#level3"><i class="ri-code-s-slash-line" style="margin-right:8px"></i> Advanced</a>
+                    </li>
+                    <li><a href="#tools"><i class="ri-tools-line" style="margin-right:8px"></i> Required Tools</a></li>
+                    <li class="sidebar-menu-header" style="margin-top: 20px;">More Pages</li>
+                    <li><a href="/transparency/index.html"><i class="ri-file-shield-line" style="margin-right:8px"></i>
+                            Constitution</a></li>
+                    <li><a href="/transparency/security.html"><i class="ri-shield-line" style="margin-right:8px"></i>
+                            Security</a></li>
+                    <li><a href="/transparency/privacy-policy.html"><i class="ri-shield-user-line"
+                                style="margin-right:8px"></i> Privacy Policy</a></li>
+                </ul>
+            </aside>
+
+            <main class="audit-body">
+                <section class="audit-section">
+                    <h2><i class="ri-question-line" style="color: var(--primary);"></i> Why Verify Yourself?</h2>
+                    <p>In the digital age, <strong>trust must be earned</strong>, not assumed. While we provide
+                        transparency documentation, we believe users should have the knowledge and tools to verify our
+                        claims independently.</p>
+
+                    <div class="info-box">
+                        <h4><i class="ri-lightbulb-line"></i> What You'll Learn</h4>
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li>How to verify the APK signature and authenticity</li>
+                            <li>How to monitor network traffic to ensure no data leaks</li>
+                            <li>How to decompile and inspect the app's actual code</li>
+                            <li>How to analyze permissions and security configurations</li>
+                            <li>How to detect malicious behavior patterns</li>
+                        </ul>
+                    </div>
+
+                    <p>This guide is structured in three levels: <strong>Basic</strong> for everyday users,
+                        <strong>Intermediate</strong> for tech-savvy individuals, and <strong>Advanced</strong> for
+                        security professionals and developers.
+                    </p>
+                </section>
+
+                <!-- LEVEL 1: BASIC VERIFICATION -->
+                <section class="audit-section" id="level1">
+                    <div class="verification-level">
+                        <h3><i class="ri-shield-user-line"></i> Level 1: Basic Verification <span
+                                class="difficulty difficulty-easy">EASY</span></h3>
+                        <p>No technical knowledge required. These checks can be performed by anyone in under 10
+                            minutes.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">1</span> Verify Official Download Source</h4>
+                        <p><strong>Why:</strong> Ensure you're installing the genuine Aido app, not a malicious clone.
+                        </p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Only download Aido from the <strong>Google Play Store</strong> or our official GitHub
+                                releases page</li>
+                            <li>Check the developer name: <strong>Rubex</strong></li>
+                            <li>Verify the package name: <code>com.rr.aido</code></li>
+                            <li>Cross-reference with our website: <a href="https://myaido.web.app"
+                                    target="_blank">myaido.web.app</a></li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> The app should only be
+                            available through official channels listed on our website.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">2</span> Check App Permissions</h4>
+                        <p><strong>Why:</strong> Verify that Aido only requests necessary permissions and nothing
+                            suspicious.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Go to <strong>Settings → Apps → Aido → Permissions</strong></li>
+                            <li>Review each permission and compare with our <a
+                                    href="/transparency/permissions.html">Permissions Deep Dive</a> page</li>
+                            <li>Ensure no unexpected permissions are requested (e.g., Camera, Microphone, SMS)</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Only essential permissions
+                            like Accessibility, Notifications, and Storage should be present.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">3</span> Test Network Activity (Simple Method)</h4>
+                        <p><strong>Why:</strong> Verify that Aido doesn't send your data to unknown servers.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Enable <strong>Airplane Mode</strong> on your device</li>
+                            <li>Open Aido and use core features (text shortcuts, clipboard manager, utility commands)
+                            </li>
+                            <li>Observe that all features work perfectly without internet</li>
+                            <li>Disable Airplane Mode and check if Aido requests network access for basic operations
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> All core features should
+                            work offline. Network is only used when you explicitly use AI features or online commands.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">4</span> Review Privacy Policy & Transparency Pages</h4>
+                        <p><strong>Why:</strong> Understand what data Aido collects and how it's used.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Read our <a href="/transparency/privacy-policy.html">Privacy Policy</a></li>
+                            <li>Review our <a href="/transparency/zero-tolerance.html">Zero Tolerance List</a></li>
+                            <li>Check our <a href="/transparency/data-safety.html">Data Processing</a> documentation
+                            </li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Crystal-clear documentation
+                            with no vague language or hidden clauses.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">5</span> Test Offline Functionality</h4>
+                        <p><strong>Why:</strong> If an app works perfectly without internet, it can't be secretly
+                            sending your data.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Turn on <strong>Airplane Mode</strong></li>
+                            <li>Test all core features:
+                                <ul>
+                                    <li>Type text shortcuts (e.g., "@em" for email)</li>
+                                    <li>Use clipboard manager</li>
+                                    <li>Try utility commands (.date, .reverse, etc.)</li>
+                                    <li>Test font library</li>
+                                </ul>
+                            </li>
+                            <li>Verify everything works smoothly without any errors</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> All features except AI and
+                            translation work perfectly offline, proving data stays on your device.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">6</span> Check Play Store Reviews & Ratings</h4>
+                        <p><strong>Why:</strong> Real user experiences reveal the truth about an app's behavior.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Read recent reviews on Google Play Store</li>
+                            <li>Look for privacy-related complaints or data concerns</li>
+                            <li>Check if users report unexpected behavior</li>
+                            <li>Note the developer's responses to negative reviews</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Positive reviews about
+                            privacy, no reports of data theft, transparent developer responses.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">7</span> Observe Battery & Data Usage</h4>
+                        <p><strong>Why:</strong> Suspicious apps drain battery with background activities and consume
+                            data secretly.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Go to <strong>Settings → Battery → Battery Usage</strong></li>
+                            <li>Check Aido's battery consumption (should be minimal)</li>
+                            <li>Go to <strong>Settings → Network & Internet → Data Usage</strong></li>
+                            <li>Check Aido's data usage (should be near zero if you don't use online AI)</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Minimal battery usage,
+                            near-zero background data consumption.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">8</span> Verify No Ads or Trackers</h4>
+                        <p><strong>Why:</strong> Apps with ads always track you. Ad-free apps are inherently more
+                            private.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Use Aido for a week and observe: Do you see any ads?</li>
+                            <li>Check if there's any "Ad settings" or "Personalized ads" option</li>
+                            <li>Look for tracking prompts or consent dialogs</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Zero ads, zero tracking
+                            prompts, zero consent dialogs for analytics.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRE-INSTALLATION VERIFICATION -->
+                <section class="audit-section" id="pre-install">
+                    <div class="verification-level">
+                        <h3><i class="ri-download-cloud-line"></i> Pre-Installation Checks <span
+                                class="difficulty difficulty-easy">EASY</span></h3>
+                        <p>Verify safety BEFORE installing the app.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">9</span> Check Play Store Data Safety Section</h4>
+                        <p><strong>Why:</strong> Google requires developers to declare data collection transparently.
+                        </p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Open Aido's Play Store page</li>
+                            <li>Scroll to <strong>"Data safety"</strong> section</li>
+                            <li>Check what data is collected and shared</li>
+                            <li>Verify our claims: "No data shared with third parties"</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Data safety section should
+                            clearly state minimal data collection and no third-party sharing.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">10</span> Research the Developer</h4>
+                        <p><strong>Why:</strong> Trustworthy developers have public presence and accountability.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Search for "Aido app" and "Rubex developer" online</li>
+                            <li>Check our official website: <a href="https://myaido.web.app"
+                                    target="_blank">myaido.web.app</a></li>
+                            <li>Look for social media presence, GitHub activity, community engagement</li>
+                            <li>Check if other users are discussing the app on Reddit, Twitter, forums</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Active developer presence,
+                            transparency center, positive community discussions.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">11</span> Compare Permissions with Similar Apps</h4>
+                        <p><strong>Why:</strong> Excessive permissions compared to competitors is a red flag.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Find similar keyboard/clipboard apps on Play Store</li>
+                            <li>Compare their permissions with Aido's</li>
+                            <li>Aido should request similar or fewer permissions</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Aido requests standard
+                            permissions for its category, nothing excessive.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BEHAVIORAL OBSERVATION -->
+                <section class="audit-section" id="behavioral">
+                    <div class="verification-level">
+                        <h3><i class="ri-eye-line"></i> Behavioral Observation <span
+                                class="difficulty difficulty-easy">EASY</span></h3>
+                        <p>Monitor app behavior during daily usage to spot abnormalities.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">12</span> Verify No Automatic Background Execution</h4>
+                        <p><strong>Why:</strong> Malicious apps run in background without permission to spy or steal
+                            data.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Go to <strong>Settings → Apps → Aido → Battery</strong></li>
+                            <li>Check "Background usage" - should show minimal or zero usage</li>
+                            <li>Go to <strong>Settings → Developer Options → Running Services</strong></li>
+                            <li>Close all apps and wait 10 minutes</li>
+                            <li>Check if Aido appears in running services (it shouldn't!)</li>
+                            <li>Restart your phone and check battery stats after 1 hour</li>
+                            <li>Aido should NOT appear in battery usage if you haven't used it</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Zero background activity.
+                            Aido only runs when YOU actively use it. No automatic startup after reboot.
+                        </div>
+                        <!--<div class="warning-box">
+                            <strong><i class="ri-alert-line"></i> Red Flag:</strong> If Aido appears in battery usage or
+                            running services when you haven't used it, report immediately!
+                        </div>-->
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">13</span> Verify Banking & SMS Protection</h4>
+                        <p><strong>Why:</strong> Verify that Aido cannot access or steal banking info, SMS, passwords,
+                            or OTPs.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li><strong>Test Banking Apps:</strong>
+                                <ul>
+                                    <li>Open your banking app (PhonePe, Paytm, Google Pay, etc.)</li>
+                                    <li>Try using Aido features - they should be DISABLED automatically</li>
+                                    <li>Try typing shortcuts in password/PIN fields - they WON'T work (good!)</li>
+                                    <li>Aido should not interfere with UPI transactions</li>
+                                </ul>
+                            </li>
+                            <li><strong>Test SMS Access:</strong>
+                                <ul>
+                                    <li>Go to <strong>Settings → Apps → Aido → Permissions</strong></li>
+                                    <li>Verify: SMS permission should be <strong>NOT GRANTED</strong></li>
+                                    <li>Aido should NEVER request SMS permission</li>
+                                </ul>
+                            </li>
+                            <li><strong>Test Password Fields:</strong>
+                                <ul>
+                                    <li>Open any app with password/PIN input</li>
+                                    <li>Aido's shortcuts should NOT work in these fields</li>
+                                    <li>Clipboard manager should NOT capture passwords</li>
+                                </ul>
+                            </li>
+                            <li><strong>Test OTP Fields:</strong>
+                                <ul>
+                                    <li>Receive an OTP via SMS</li>
+                                    <li>Type it manually - Aido should NOT interfere</li>
+                                    <li>OTP should NOT appear in clipboard history</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong>
+                            <ul style="margin: 0.5rem 0;">
+                                <li>No SMS permission granted (ever!)</li>
+                                <li>Banking apps work normally without Aido interference</li>
+                                <li>Passwords, PINs, and OTPs are never captured</li>
+                                <li>Aido automatically disables itself in sensitive apps</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="warning-box">
+                            <strong><i class="ri-alert-line"></i> Red Flag:</strong> If Aido requests SMS permission,
+                            captures passwords, or interferes with banking apps - UNINSTALL IMMEDIATELY and report!
+                        </div>-->
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">14</span> Verify No Auto-Start After Reboot</h4>
+                        <p><strong>Why:</strong> Malicious apps auto-start after reboot to run in background without
+                            your knowledge.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Check current permissions: <strong>Settings → Apps → Aido → Permissions</strong></li>
+                            <li>Verify "Autostart" or "Run at startup" is <strong>DISABLED</strong></li>
+                            <li><strong>Actual Test:</strong>
+                                <ul>
+                                    <li>Note Aido is NOT currently running (close all apps)</li>
+                                    <li>Restart your phone completely</li>
+                                    <li>After restart, check <strong>Settings → Apps → Running Services</strong></li>
+                                    <li>Aido should NOT be in the list</li>
+                                </ul>
+                            </li>
+                            <li>Open Recent Apps menu - Aido should not appear unless you opened it</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Aido does NOT auto-start. It
+                            only runs when YOU manually open or use it.
+                        </div>
+                        <!--<div class="warning-box">
+                            <strong><i class="ri-alert-line"></i> Red Flag:</strong> If Aido automatically starts after
+                            reboot without you opening it, report this immediately!
+                        </div>-->
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">15</span> Check for Unexpected Notifications</h4>
+                        <p><strong>Why:</strong> Spammy notifications often indicate data-hungry apps.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Use Aido for several days</li>
+                            <li>Check if you receive promotional notifications</li>
+                            <li>Look for requests to enable additional permissions</li>
+                            <li>Watch for "rate us" spam or intrusive popups</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Zero promotional
+                            notifications, no spam, no intrusive permission requests.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">16</span> Test Contact & Call Log Access</h4>
+                        <p><strong>Why:</strong> Verify Aido cannot steal your contacts, call history, or phone records.
+                        </p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Go to <strong>Settings → Apps → Aido → Permissions</strong></li>
+                            <li>Check these permissions are <strong>NOT GRANTED</strong>:
+                                <ul>
+                                    <li>Contacts</li>
+                                    <li>Phone (Call logs)</li>
+                                    <li>Call history</li>
+                                    <li>SMS/MMS</li>
+                                </ul>
+                            </li>
+                            <li>Aido should NEVER request these permissions</li>
+                            <li>If prompted, deny and verify app still works normally</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Zero access to contacts,
+                            calls, or SMS. Aido doesn't need or request these permissions.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">17</span> Verify Camera & Microphone Protection</h4>
+                        <p><strong>Why:</strong> Ensure Aido cannot record audio, take photos, or spy through
+                            camera/microphone.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Go to <strong>Settings → Apps → Aido → Permissions</strong></li>
+                            <li>Verify these are <strong>NOT GRANTED</strong>:
+                                <ul>
+                                    <li>Camera</li>
+                                    <li>Microphone</li>
+                                </ul>
+                            </li>
+                            <li>Check <strong>Settings → Privacy → Camera Access</strong> - Aido should not be listed
+                            </li>
+                            <li>Check <strong>Settings → Privacy → Microphone Access</strong> - Aido should not be
+                                listed</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No camera or microphone
+                            access. Aido is a text/clipboard tool, not a spying tool!
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">18</span> Verify App Size & Updates</h4>
+                        <p><strong>Why:</strong> Sudden large app size increases can indicate added tracking libraries.
+                        </p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Note Aido's current app size in Settings → Apps</li>
+                            <li>After updates, check if size changes significantly</li>
+                            <li>Read update changelogs to understand changes</li>
+                            <li>Large size increases without clear feature additions = suspicious</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> App size should stay
+                            reasonable. Updates should have clear, transparent changelogs.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COMMUNITY VERIFICATION -->
+                <section class="audit-section" id="community">
+                    <div class="verification-level">
+                        <h3><i class="ri-team-line"></i> Community-Based Verification <span
+                                class="difficulty difficulty-easy">EASY</span></h3>
+                        <p>Leverage collective intelligence to verify trustworthiness.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">19</span> Check VirusTotal Scan</h4>
+                        <p><strong>Why:</strong> VirusTotal scans APKs with 70+ antivirus engines.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Visit <a href="https://www.virustotal.com" target="_blank">VirusTotal.com</a></li>
+                            <li>Search for <code>com.rr.aido</code> or upload the APK</li>
+                            <li>Review scan results from multiple security vendors</li>
+                            <li>Check detection ratio (should be 0/70+)</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Clean scan with 0 detections
+                            from reputable antivirus engines.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">20</span> Search for Security Research</h4>
+                        <p><strong>Why:</strong> Security researchers publicly expose malicious apps.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Google: "Aido app security vulnerability"</li>
+                            <li>Search Twitter for: "Aido app privacy concern"</li>
+                            <li>Check security forums and Reddit for discussions</li>
+                            <li>Look for independent security audits or reports</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No security reports, no
+                            privacy scandals, no exposed vulnerabilities.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">21</span> Join User Communities</h4>
+                        <p><strong>Why:</strong> Real users share genuine experiences and concerns.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ul>
+                            <li>Join Aido's user communities (Discord, Telegram, Reddit)</li>
+                            <li>Ask existing users about their privacy experiences</li>
+                            <li>Check if anyone has reported data breaches or privacy violations</li>
+                            <li>Observe developer responsiveness to concerns</li>
+                        </ul>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Active community, positive
+                            privacy feedback, responsive developer.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LEVEL 2: INTERMEDIATE VERIFICATION -->
+                <section class="audit-section" id="level2">
+                    <div class="verification-level">
+                        <h3><i class="ri-terminal-line"></i> Level 2: Intermediate Verification <span
+                                class="difficulty difficulty-medium">MEDIUM</span></h3>
+                        <p>Requires basic technical knowledge and tools. Recommended for tech-savvy users who want
+                            deeper insights.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">22</span> Verify APK Signature</h4>
+                        <p><strong>Why:</strong> Confirm that the APK hasn't been tampered with and is genuinely from
+                            us.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">APK Analyzer (Android Studio)</span>
+                            <span class="tool-badge">jarsigner (JDK)</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Extract the APK file from your device using:
+                                <div class="code-block">adb pull $(adb shell pm path com.rr.aido | cut -d: -f2)
+                                    aido.apk</div>
+                            </li>
+                            <li>Verify the signature using jarsigner:
+                                <div class="code-block">jarsigner -verify -verbose -certs aido.apk</div>
+                            </li>
+                            <li>Check the certificate fingerprint:
+                                <div class="code-block">keytool -printcert -jarfile aido.apk</div>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> The APK should be properly
+                            signed with our official certificate. SHA-256 fingerprint should match the one published on
+                            our GitHub.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">23</span> Monitor Network Traffic</h4>
+                        <p><strong>Why:</strong> Capture and analyze all network requests to ensure no unauthorized
+                            data transmission.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">HTTP Toolkit</span>
+                            <span class="tool-badge">Charles Proxy</span>
+                            <span class="tool-badge">mitmproxy</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Install HTTP Toolkit or Charles Proxy on your computer</li>
+                            <li>Configure your Android device to use it as a proxy</li>
+                            <li>Install the SSL certificate on your device (for HTTPS inspection)</li>
+                            <li>Use Aido normally for 10-15 minutes, testing various features</li>
+                            <li>Review all network requests in the proxy tool</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong>
+                            <ul style="margin: 0.5rem 0;">
+                                <li>No requests when using offline features</li>
+                                <li>Only requests to known AI APIs when using online AI features</li>
+                                <li>No analytics tracking or telemetry</li>
+                                <li>No requests to ad networks or data brokers</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">24</span> Analyze Manifest File</h4>
+                        <p><strong>Why:</strong> The AndroidManifest.xml contains all permissions, services, and
+                            components. Inspecting it reveals what the app CAN do.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">Apktool</span>
+                            <span class="tool-badge">APK Analyzer</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Decompile the APK using Apktool:
+                                <div class="code-block">apktool d aido.apk</div>
+                            </li>
+                            <li>Open <code>AndroidManifest.xml</code> and review:
+                                <ul>
+                                    <li>Permissions: Should match our documentation</li>
+                                    <li>Services: Look for background services</li>
+                                    <li>Receivers: Check for broadcast receivers</li>
+                                    <li>Activities: Verify app entry points</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No hidden services,
+                            receivers, or permissions. Everything should align with our transparency documentation.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">25</span> Check Storage & Data Files</h4>
+                        <p><strong>Why:</strong> Verify what data Aido stores locally and ensure nothing is being
+                            collected secretly.</p>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Using ADB, browse Aido's data directory:
+                                <div class="code-block">adb shell<br>run-as com.rr.aido<br>ls -la</div>
+                            </li>
+                            <li>Check for databases, shared preferences, and cache files</li>
+                            <li>Use <code>sqlite3</code> to inspect database contents:
+                                <div class="code-block">sqlite3 databases/aido.db<br>.tables<br>.schema</div>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Only user-created data
+                            (shortcuts, saved clips, settings). No telemetry, no analytics, no tracking databases.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LEVEL 3: ADVANCED VERIFICATION -->
+                <section class="audit-section" id="level3">
+                    <div class="verification-level">
+                        <h3><i class="ri-code-s-slash-line"></i> Level 3: Advanced Verification <span
+                                class="difficulty difficulty-hard">ADVANCED</span></h3>
+                        <p>For security researchers and developers. Requires programming knowledge and deep technical
+                            understanding.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">26</span> Decompile & Inspect Source Code</h4>
+                        <p><strong>Why:</strong> The ultimate verification—reading the actual code to see what the app
+                            does.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">JADX</span>
+                            <span class="tool-badge">JEB Decompiler</span>
+                            <span class="tool-badge">Ghidra</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Decompile the APK using JADX:
+                                <div class="code-block">jadx -d output_folder aido.apk</div>
+                            </li>
+                            <li>Open the decompiled code in an IDE (IntelliJ IDEA recommended)</li>
+                            <li>Search for suspicious patterns:
+                                <div class="code-block">grep -r "analytics" .<br>grep -r "tracking" .<br>grep -r
+                                    "telemetry" .<br>grep -r "URLConnection" .<br>grep -r "HttpClient" .</div>
+                            </li>
+                            <li>Review key files:
+                                <ul>
+                                    <li><code>AidoAccessibilityService.kt</code> - Accessibility logic</li>
+                                    <li><code>ClipboardManager.kt</code> - Clipboard handling</li>
+                                    <li><code>NetworkModule.kt</code> - Network requests</li>
+                                    <li><code>UtilityCommandProcessor.kt</code> - Command processing</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No obfuscated code hiding
+                            malicious behavior. All network activity should be for user-initiated features only.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">27</span> Static Analysis with Security Tools</h4>
+                        <p><strong>Why:</strong> Automated tools can detect vulnerabilities and suspicious code
+                            patterns faster than manual review.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">MobSF</span>
+                            <span class="tool-badge">APKLeaks</span>
+                            <span class="tool-badge">Qark</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Install Mobile Security Framework (MobSF):
+                                <div class="code-block">docker pull
+                                    opensecurity/mobile-security-framework-mobsf<br>docker
+                                    run -it -p 8000:8000 opensecurity/mobile-security-framework-mobsf</div>
+                            </li>
+                            <li>Upload the Aido APK to MobSF at <code>http://localhost:8000</code></li>
+                            <li>Review the automated security report for:
+                                <ul>
+                                    <li>Hardcoded secrets or API keys</li>
+                                    <li>Insecure data storage</li>
+                                    <li>Weak cryptography</li>
+                                    <li>Privacy violations</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No critical or high-risk
+                            vulnerabilities. Any findings should be documented in our security changelog.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">28</span> Dynamic Runtime Analysis</h4>
+                        <p><strong>Why:</strong> Monitor actual app behavior at runtime to catch anything static
+                            analysis misses.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">Frida</span>
+                            <span class="tool-badge">Xposed Framework</span>
+                            <span class="tool-badge">objection</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Install Frida on your rooted device or emulator</li>
+                            <li>Hook into Aido's process:
+                                <div class="code-block">frida -U -f com.rr.aido</div>
+                            </li>
+                            <li>Inject monitoring scripts to track:
+                                <ul>
+                                    <li>File read/write operations</li>
+                                    <li>Network socket connections</li>
+                                    <li>Clipboard access</li>
+                                    <li>Process spawning</li>
+                                </ul>
+                            </li>
+                            <li>Example Frida script to monitor network:
+                                <div class="code-block">Java.perform(function() {<br> var URL =
+                                    Java.use("java.net.URL");<br> URL.openConnection.implementation = function() {<br>
+                                    console.log("Network request: " + this.toString());<br> return
+                                    this.openConnection();<br> };<br>});</div>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No unexpected file access,
+                            no unauthorized network connections, no data exfiltration attempts.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">29</span> Binary Analysis (Native Code)</h4>
+                        <p><strong>Why:</strong> If Aido includes native libraries (.so files), they need inspection
+                            too.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">Ghidra</span>
+                            <span class="tool-badge">IDA Pro</span>
+                            <span class="tool-badge">radare2</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Extract native libraries from the APK:
+                                <div class="code-block">unzip aido.apk -d extracted<br>find extracted/lib -name "*.so"
+                                </div>
+                            </li>
+                            <li>Load each .so file into Ghidra for disassembly</li>
+                            <li>Look for suspicious function calls:
+                                <ul>
+                                    <li>Socket operations</li>
+                                    <li>File operations</li>
+                                    <li>Encryption/decryption</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> No hidden backdoors or
+                            malicious code in native libraries. Currently, Aido is pure Kotlin with no native
+                            dependencies.
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4><span class="step-number">30</span> Traffic Decryption & SSL Pinning Check</h4>
+                        <p><strong>Why:</strong> Verify that HTTPS traffic isn't hiding secret data transmission.</p>
+                        <p><strong>Required Tools:</strong></p>
+                        <div>
+                            <span class="tool-badge">Burp Suite</span>
+                            <span class="tool-badge">SSLUnpinning</span>
+                        </div>
+                        <p><strong>How to verify:</strong></p>
+                        <ol>
+                            <li>Set up Burp Suite as a proxy with SSL interception</li>
+                            <li>If SSL pinning is implemented, bypass it using:
+                                <div class="code-block">frida --codeshare
+                                    pcipolloni/universal-android-ssl-pinning-bypass-with-frida
+                                    -U -f com.rr.aido</div>
+                            </li>
+                            <li>Intercept and decrypt all HTTPS traffic</li>
+                            <li>Verify request payloads and response data</li>
+                        </ol>
+                        <div class="success-box">
+                            <strong><i class="ri-check-line"></i> Expected Result:</strong> Only user-initiated AI
+                            requests. No background telemetry or analytics beacons.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REQUIRED TOOLS SECTION -->
+                <section class="audit-section" id="tools">
+                    <h2><i class="ri-tools-line" style="color: var(--primary);"></i> Required Tools & Resources</h2>
+                    <p>Here's a complete list of tools you'll need for different verification levels.</p>
+
+                    <div class="collapsible-section" onclick="toggleCollapse('tools-basic')">
+                        <strong><i class="ri-arrow-down-s-line"></i> Basic Level Tools</strong>
+                    </div>
+                    <div id="tools-basic" class="collapsible-content">
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Android Settings</strong> - Built into your device</li>
+                            <li><strong>Web Browser</strong> - To read our transparency documentation</li>
+                            <li><strong>Play Store</strong> - For official app downloads</li>
+                        </ul>
+                    </div>
+
+                    <div class="collapsible-section" onclick="toggleCollapse('tools-intermediate')">
+                        <strong><i class="ri-arrow-down-s-line"></i> Intermediate Level Tools</strong>
+                    </div>
+                    <div id="tools-intermediate" class="collapsible-content">
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li><strong>ADB (Android Debug Bridge)</strong> - <a
+                                    href="https://developer.android.com/studio/command-line/adb"
+                                    target="_blank">Download</a></li>
+                            <li><strong>HTTP Toolkit</strong> - <a href="https://httptoolkit.com"
+                                    target="_blank">httptoolkit.com</a></li>
+                            <li><strong>Charles Proxy</strong> - <a href="https://www.charlesproxy.com"
+                                    target="_blank">charlesproxy.com</a></li>
+                            <li><strong>Apktool</strong> - <a href="https://ibotpeaches.github.io/Apktool/"
+                                    target="_blank">Download</a></li>
+                            <li><strong>JDK (Java Development Kit)</strong> - <a href="https://www.oracle.com/java/"
+                                    target="_blank">oracle.com/java</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="collapsible-section" onclick="toggleCollapse('tools-advanced')">
+                        <strong><i class="ri-arrow-down-s-line"></i> Advanced Level Tools</strong>
+                    </div>
+                    <div id="tools-advanced" class="collapsible-content">
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li><strong>JADX</strong> - <a href="https://github.com/skylot/jadx"
+                                    target="_blank">github.com/skylot/jadx</a></li>
+                            <li><strong>MobSF (Mobile Security Framework)</strong> - <a
+                                    href="https://github.com/MobSF/Mobile-Security-Framework-MobSF"
+                                    target="_blank">github.com/MobSF</a></li>
+                            <li><strong>Frida</strong> - <a href="https://frida.re" target="_blank">frida.re</a></li>
+                            <li><strong>Ghidra</strong> - <a href="https://ghidra-sre.org"
+                                    target="_blank">ghidra-sre.org</a></li>
+                            <li><strong>Burp Suite</strong> - <a href="https://portswigger.net/burp"
+                                    target="_blank">portswigger.net/burp</a></li>
+                            <li><strong>objection</strong> - <a href="https://github.com/sensepost/objection"
+                                    target="_blank">github.com/sensepost/objection</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- RED FLAGS SECTION 
+                <section class="audit-section">
+                    <h2><i class="ri-error-warning-line" style="color: var(--primary);"></i> Red Flags to Watch For
+                    </h2>
+                    <p>During your verification, if you discover any of the following, please report it immediately to
+                        our security team:</p>-->
+
+                <!--<div class="warning-box">
+                    <strong><i class="ri-alert-line"></i> Critical Red Flags</strong>
+                    <ul style="margin: 0.75rem 0;">
+                        <li>Unexpected network connections to unknown servers</li>
+                        <li>Data being sent without user consent</li>
+                        <li>Hidden permissions not listed in our documentation</li>
+                        <li>Obfuscated or encrypted code hiding its purpose</li>
+                        <li>Background services running when the app is closed</li>
+                        <li>Analytics or tracking libraries (Google Analytics, Firebase Analytics, etc.)</li>
+                        <li>Ad network SDKs or data broker connections</li>
+                    </ul>
+                </div>-->
+
+                <p>If you find discrepancies between our claims and actual behavior, <strong>we want to
+                        know</strong>. Contact us at: <a href="mailto:aiqknow@gmail.com">aiqknow@gmail.com</a></p>
+                </section>
+
+                <!-- REPORTING SECTION -->
+                <section class="audit-section">
+                    <h2><i class="ri-bug-line" style="color: var(--primary);"></i> Responsible Disclosure</h2>
+                    <p>Security researchers: If you discover vulnerabilities during your audit, we encourage responsible
+                        disclosure.</p>
+
+                    <div class="info-box">
+                        <h4><i class="ri-mail-line"></i> How to Report</h4>
+                        <ol style="padding-left: 20px; line-height: 1.8;">
+                            <li>Email us at: <strong>aiqknow@gmail.com</strong></li>
+                            <li>Include detailed steps to reproduce the issue</li>
+                            <li>Allow us 90 days to patch before public disclosure</li>
+                            <li>Get acknowledged in our Hall of Fame (optional)</li>
+                        </ol>
+                    </div>
+
+                    <p>We do not currently offer a bug bounty program, but we deeply appreciate security research and
+                        will publicly acknowledge your contribution (with your permission).</p>
+                </section>
+
+                <!-- Page Navigation -->
+                <div class="page-navigation">
+                    <a href="/transparency/index.html" class="nav-btn prev-btn">
+                        <i class="ri-arrow-left-line"></i> Constitution
+                    </a>
+                    <a href="/transparency/security.html" class="nav-btn next-btn">
+                        Security Details <i class="ri-arrow-right-line"></i>
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="audit-footer">
+        <div class="container">
+            <p>&copy; 2026 Aido App. Transparency Center. <a href="../index.html"
+                    style="text-decoration: underline;">Return to Main Site</a></p>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-overlay" id="menu-overlay"></div>
+    <div class="mobile-menu-drawer" id="mobile-menu">
+        <div class="drawer-header">
+            <h3>Verification Menu</h3>
+            <button id="close-menu-btn" class="mobile-menu-toggle"><i class="ri-close-line"></i></button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#level1"><i class="ri-user-line" style="margin-right:8px"></i> Basic Checks</a></li>
+            <li><a href="#level2"><i class="ri-terminal-line" style="margin-right:8px"></i> Intermediate</a></li>
+            <li><a href="#level3"><i class="ri-code-s-slash-line" style="margin-right:8px"></i> Advanced</a></li>
+            <li><a href="#tools"><i class="ri-tools-line" style="margin-right:8px"></i> Required Tools</a></li>
+            <li><a href="/transparency/index.html"><i class="ri-file-shield-line" style="margin-right:8px"></i>
+                    Constitution</a></li>
+            <li><a href="/transparency/security.html"><i class="ri-shield-line" style="margin-right:8px"></i>
+                    Security</a></li>
+        </ul>
+    </div>
+
+    <script src="/transparency/js/audit.js"></script>
+    <script>
+        function toggleCollapse(id) {
+            var content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>
